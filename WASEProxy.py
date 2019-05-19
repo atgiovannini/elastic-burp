@@ -26,7 +26,8 @@ class WASEProxyHandler(ProxyHandler):
 	# Initialize ES connection and index
 	res = connections.create_connection(hosts=[args.elasticsearch])
 	idx = Index(args.index)
-	idx.doc_type(DocHTTPRequestResponse)
+	idx.document(DocHTTPRequestResponse)
+	# idx.doc_type(DocHTTPRequestResponse)
 	try:
 	    DocHTTPRequestResponse.init()
 	    idx.create()

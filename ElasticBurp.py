@@ -66,18 +66,22 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, ITab):
     def applyConfig(self):
         try:
             print("Connecting to '%s', index '%s'" % (self.confESHost, self.confESIndex))
-            self.es = connections.create_connection(hosts=[self.confESHost])
+            self.es = connections.create_connection(hosts=[self.confESHost], timeout=60)
             self.idx = Index(self.confESIndex)
-            self.idx.doc_type(DocHTTPRequestResponse)
+            self.idx.document(DocHTTPRequestResponse)
+            # self.idx.doc_type(DocHTTPRequestResponse)
+            print("Ready to connect index")
             if self.idx.exists():
                 self.idx.open()
             else:
                 self.idx.create()
+            print("Idx created or openend")
             self.callbacks.saveExtensionSetting("elasticburp.host", self.confESHost)
             self.callbacks.saveExtensionSetting("elasticburp.index", self.confESIndex)
             self.callbacks.saveExtensionSetting("elasticburp.tools", str(self.confBurpTools))
             self.callbacks.saveExtensionSetting("elasticburp.onlyresp", str(int(self.confBurpOnlyResp)))
         except Exception as e:
+            print(e)
             JOptionPane.showMessageDialog(self.panel, "<html><p style='width: 300px'>Error while initializing ElasticSearch: %s</p></html>" % (str(e)), "Error", JOptionPane.ERROR_MESSAGE)
 
     ### ITab ###

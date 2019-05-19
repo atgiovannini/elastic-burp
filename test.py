@@ -6,7 +6,8 @@ from datetime import datetime
 connections.create_connection(hosts=["localhost"])
 
 idx = Index("test")
-idx.doc_type(DocHTTPRequestResponse)
+idx.document(DocHTTPRequestResponse)
+#idx.doc_type(DocHTTPRequestResponse)
 #idx.create()
 
 DocHTTPRequestResponse.init()
