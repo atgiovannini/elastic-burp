@@ -139,7 +139,7 @@ class DocHTTPRequestResponse(DocType):
 
     def save(self, storeResponseBody=True, **kwargs):
         if not self.timestamp:
-            self.timestamp = datetime.now(tz)                 # TODO: timestamp options: now (as is), request and response
+            self.timestamp = datetime.utcnow()                 # TODO: timestamp options: now (as is), request and response
         if self.response.body and ((self.response.inferred_content_type and self.response.inferred_content_type == "HTML") or (not self.response.inferred_content_type and self.response.content_type and ("HTML" in self.response.content_type or "html" in self.response.content_type))):
             parser = WASEHTMLParser()
             parser.feed(self.response.body)

@@ -30,6 +30,8 @@ try:
     tz = get_localzone()
 except:
     tz = None
+
+
 reDateHeader = re.compile("^Date:\s*(.*)$", flags=re.IGNORECASE)
 
 ### Config (TODO: move to config tab) ###
@@ -310,11 +312,12 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, ITab):
             doc.response.body = response[bodyOffset:].tostring().decode("ascii", "replace")
 
             if timeStampFromResponse:
-                if dateHeader:
-                    try:
-                        doc.timestamp = datetime.fromtimestamp(mktime_tz(parsedate_tz(dateHeader)), tz) # try to use date from response header "Date"
-                        self.lastTimestamp = doc.timestamp
-                    except:
-                        doc.timestamp = self.lastTimestamp      # fallback: last stored timestamp. Else: now
+                doc.timestamp = self.lastTimestamp
+                # if dateHeader:
+                #     try:
+                #         doc.timestamp = datetime.fromtimestamp(mktime_tz(parsedate_tz(dateHeader)), tz) # try to use date from response header "Date"
+                #         self.lastTimestamp = doc.timestamp
+                #     except:
+                #         doc.timestamp = self.lastTimestamp      # fallback: last stored timestamp. Else: now
 
         return doc
